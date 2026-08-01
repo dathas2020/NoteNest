@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import Button from "../components/Button";
+import Input from "../components/Input";
 
 function Register() {
 
@@ -34,7 +36,7 @@ function Register() {
 
         } catch (error) {
 
-            alert(error.response.data.message);
+            alert(error.response?.data?.message || error.message);
 
         }
 
@@ -48,30 +50,31 @@ function Register() {
 
             <form onSubmit={handleSubmit}>
 
-                <input
+                <Input
                     name="name"
                     placeholder="Name"
+                    value={form.name}
                     onChange={handleChange}
                 />
 
-                <input
+                <Input
                     name="email"
                     placeholder="Email"
+                    value={form.email}
                     onChange={handleChange}
                 />
 
-                <input
-                    name="password"
+                <Input
                     type="password"
+                    name="password"
                     placeholder="Password"
+                    value={form.password}
                     onChange={handleChange}
                 />
 
-                <button type="submit">
-
+                <Button type="submit">
                     Register
-
-                </button>
+                </Button>
 
             </form>
 

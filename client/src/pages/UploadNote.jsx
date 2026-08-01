@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import Button from "../components/Button";
+import Input from "../components/Input";
 
 function UploadNote() {
 
@@ -51,41 +53,44 @@ function UploadNote() {
 
             <form onSubmit={handleSubmit}>
 
-                <input
+                <Input
                     name="title"
                     placeholder="Title"
+                    value={form.title}
                     onChange={handleChange}
                 />
 
-                <input
+                <Input
                     name="description"
                     placeholder="Description"
+                    value={form.description}
                     onChange={handleChange}
                 />
 
-                <input
+                <Input
                     name="subject"
                     placeholder="Subject"
+                    value={form.subject}
                     onChange={handleChange}
                 />
 
-                <input
+                <Input
                     name="topic"
                     placeholder="Topic"
+                    value={form.topic}
                     onChange={handleChange}
                 />
 
-                <input
+                <Input
                     name="fileUrl"
                     placeholder="PDF Name"
+                    value={form.fileUrl}
                     onChange={handleChange}
                 />
 
-                <button type="submit">
-
+                <Button type="submit">
                     Upload
-
-                </button>
+                </Button>
 
             </form>
 

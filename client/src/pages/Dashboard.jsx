@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
+import Layout from "../components/Layout";
+import NoteCard from "../components/NoteCard";
 
 function Dashboard() {
 
@@ -30,6 +32,7 @@ function Dashboard() {
     return (
 
         <div>
+            <Layout/>
 
             <h1>Dashboard</h1>
 
@@ -37,32 +40,10 @@ function Dashboard() {
 
             {
                 notes.map((note) => (
-
-                    <div
+                    <NoteCard
                         key={note._id}
-                        style={{
-                            border: "1px solid gray",
-                            marginBottom: "10px",
-                            padding: "10px"
-                        }}
-                    >
-
-                        <h3>{note.title}</h3>
-
-                        <p>{note.description}</p>
-
-                        <p><strong>Subject:</strong> {note.subject}</p>
-
-                        <p><strong>Topic:</strong> {note.topic}</p>
-
-                        <p>
-                            <strong>Uploaded By:</strong>
-                            {" "}
-                            {note.uploadedBy?.name}
-                        </p>
-
-                    </div>
-
+                        note={note}
+                    />
                 ))
             }
 

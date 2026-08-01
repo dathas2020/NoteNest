@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
@@ -7,6 +7,8 @@ import Dashboard from "./pages/Dashboard";
 import BrowseNotes from "./pages/BrowseNotes";
 import UploadNote from "./pages/UploadNote";
 import NoteDetails from "./pages/NoteDetails";
+import ProtectedRoute from "./components/ProtectedRoute";
+import PublicRoute from "./components/PublicRoute";
 
 function App() {
 
@@ -16,15 +18,43 @@ function App() {
 
             <Route path="/" element={<Landing />} />
 
-            <Route path="/login" element={<Login />} />
+            <Route
+                path="/login"
+                element={
+                    <PublicRoute>
+                        <Login />
+                    </PublicRoute>
+                }
+            />
 
-            <Route path="/register" element={<Register />} />
+            <Route
+                path="/register"
+                element={
+                    <PublicRoute>
+                        <Register />
+                    </PublicRoute>
+                }
+            />
 
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route
+                path="/dashboard"
+                element={
+                    <ProtectedRoute>
+                        <Dashboard />
+                    </ProtectedRoute>
+                }
+            />
 
             <Route path="/notes" element={<BrowseNotes />} />
 
-            <Route path="/upload" element={<UploadNote />} />
+            <Route
+                path="/upload"
+                element={
+                    <ProtectedRoute>
+                        <UploadNote />
+                    </ProtectedRoute>
+                }
+            />
 
             <Route path="/notes/:id" element={<NoteDetails />} />
 
