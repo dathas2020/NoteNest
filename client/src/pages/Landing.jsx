@@ -1,11 +1,33 @@
-import React from 'react'
+import Hero from "../components/Hero";
+import Features from "../components/Features";
+import LatestNotes from "../components/LatestNotes";
+import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
 
 function Landing() {
-  return (
-    <div>
-      <h1>Landing Page</h1>
-    </div>
-  )
+
+    return (
+
+        <div
+            className="
+                min-h-screen
+                bg-[#0D1117]
+                text-white
+            "
+        >
+            <Navbar />
+
+            <Hero />
+
+            <Features />
+
+            <LatestNotes />
+
+            <Footer />
+        </div>
+
+    );
+
 }
 
-export default Landing
+export default Landing;

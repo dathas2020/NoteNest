@@ -68,26 +68,49 @@ export const createNote = async (req, res) => {
 
 // Get All Notes
 export const getAllNotes = async (req, res) => {
+
     try {
 
-        const notes = await Note.find().populate(
-            "uploadedBy",
-            "name email"
-        );
+        const page = parseInt(req.query.page) || 1;
+
+        const limit = parseInt(req.query.limit) || 30;
+
+        const skip = (page - 1) * limit;
+
+        const totalNotes = await Note.countDocuments();
+
+        const notes = await Note.find()
+            .populate("uploadedBy", "name email")
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
 
         res.status(200).json({
+
             success: true,
-            notes
+
+            notes,
+
+            currentPage: page,
+
+            totalPages: Math.ceil(totalNotes / limit),
+
+            totalNotes
+
         });
 
     } catch (error) {
 
         res.status(500).json({
+
             success: false,
+
             message: error.message
+
         });
 
     }
+
 };
 
 // Search Notes
@@ -225,6 +248,41 @@ export const updateNote = async (req, res) => {
             success: false,
             message: error.message
 
+        });
+
+    }
+
+};
+
+// Download Note
+export const downloadNote = async (req, res) => {
+
+    try {
+
+        const note = await Note.findById(req.params.id);
+
+        if (!note) {
+
+            return res.status(404).json({
+                success: false,
+                message: "Note not found."
+            });
+
+        }
+
+        const filePath = path.join(
+            process.cwd(),
+            "uploads",
+            note.fileUrl
+        );
+
+        res.download(filePath);
+
+    } catch (error) {
+
+        res.status(500).json({
+            success: false,
+            message: error.message
         });
 
     }

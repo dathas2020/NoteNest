@@ -10,7 +10,8 @@ import {
     getAllNotes,
     searchNotes,
     deleteNote,
-    updateNote
+    updateNote,
+    downloadNote
 } from "../controllers/note.controller.js";
 
 const router = express.Router();
@@ -25,6 +26,11 @@ router.post(
 router.get("/", getAllNotes);
 
 router.get("/search", searchNotes);
+
+router.get(
+    "/download/:id",
+    downloadNote
+);
 
 router.delete(
     "/:id",

@@ -5,7 +5,6 @@ import NoteCard from "../components/NoteCard";
 import { Link } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
 import {
-    BookOpen,
     Library,
     User
 } from "lucide-react";
@@ -14,6 +13,9 @@ function Dashboard() {
 
     const [notes, setNotes] = useState([]);
     const [search, setSearch] = useState("");
+    const currentUser = JSON.parse(
+        localStorage.getItem("user")
+    );
 
     useEffect(() => {
 
@@ -37,7 +39,11 @@ function Dashboard() {
 
     };
 
-    const filteredNotes = notes.filter((note) => {
+    const yourNotes = notes.filter(
+        (note) => note.uploadedBy?._id === currentUser.id
+    );
+
+    const filteredNotes = yourNotes.filter((note) => {
 
         const query = search.toLowerCase();
 
@@ -57,37 +63,25 @@ function Dashboard() {
 
         <Layout>
 
+            <div className="mb-10">
+
+                <h1 className="text-4xl font-bold">
+
+                    Welcome back, {currentUser.name} 👋
+
+                </h1>
+
+                <p className="text-slate-400 mt-2">
+
+                    Manage your study resources from your personal vault.
+
+                </p>
+
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
 
-                <div className="bg-[#141821] border border-[#2A3142] rounded-xl p-5">
-
-                    <p className="flex items-center gap-2 text-slate-400 text-sm">
-                        <BookOpen size={18} />
-                        Total Notes
-                    </p>
-
-                    <h2 className="text-3xl font-bold mt-2">
-                        {notes.length}
-                    </h2>
-
-                </div>
-
-                <div className="bg-[#141821] border border-[#2A3142] rounded-xl p-5">
-
-                    <p className="flex items-center gap-2 text-slate-400 text-sm">
-                        <Library size={18} />
-                        Subjects
-                    </p>
-
-                    <h2 className="text-3xl font-bold mt-2">
-                        {
-                            [...new Set(notes.map(note => note.subject))].length
-                        }
-                    </h2>
-
-                </div>
-
-                <div className="bg-[#141821] border border-[#2A3142] rounded-xl p-5">
+                <div className="md:col-span-2 bg-[#141821] border border-[#2A3142] rounded-xl p-5">
 
                     <p className="flex items-center gap-2 text-slate-400 text-sm">
                         <User size={18} />
@@ -96,6 +90,23 @@ function Dashboard() {
 
                     <h2 className="text-xl font-semibold mt-2">
                         {JSON.parse(localStorage.getItem("user"))?.name}
+                    </h2>
+
+                </div>
+
+                <div className="bg-[#141821] border border-[#2A3142] rounded-xl p-5">
+
+                    <p className="flex items-center gap-2 text-slate-400 text-sm">
+                        <Library size={18} />
+                        Your Notes
+                    </p>
+
+                    <h2 className="text-3xl font-bold mt-2">
+                        {
+                            notes.filter(
+                                note => note.uploadedBy?._id === currentUser.id
+                            ).length
+                        }
                     </h2>
 
                 </div>
@@ -111,11 +122,11 @@ function Dashboard() {
             />
 
             <h2 className="text-xl font-semibold mb-2">
-                Study Vault
+                Your Vault
             </h2>
 
             <p className="text-slate-400 mb-5">
-                Showing {filteredNotes.length} of {notes.length} resources
+                Showing {filteredNotes.length} of {yourNotes.length} resources
             </p>
 
             {

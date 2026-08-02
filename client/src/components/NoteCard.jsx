@@ -15,7 +15,8 @@ import { useNavigate } from "react-router-dom";
 
 function NoteCard({
     note,
-    onDelete
+    onDelete,
+    showActions = true
 }) {
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -212,7 +213,7 @@ function NoteCard({
 
                 <div className="flex items-center gap-6 mt-4">
 
-                    {isOwner && (
+                    {showActions && isOwner && (
 
                         <>
 
@@ -246,38 +247,44 @@ function NoteCard({
 
                     )}
 
-                    <a
-                        href={`http://localhost:5000/uploads/${note.fileUrl}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="
-                            flex
-                            items-center
-                            gap-2
-                            text-violet-400
-                            hover:text-violet-300
-                            font-medium
-                        "
-                    >
-                        <ExternalLink size={16} />
-                        View
-                    </a>
+                    {showActions && (
+                        <>
 
-                    <a
-                        href={`http://localhost:5000/uploads/${note.fileUrl}`}
-                        download
-                        className="
-                            flex
-                            items-center
-                            gap-2
-                            font-medium
-                            text-sky-400
-                            hover:text-sky-300
-                        "
-                    >
-                        <Download size={16} />
-                        Download
-                    </a>
+                            <a
+                                href={`http://localhost:5000/uploads/${note.fileUrl}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="
+                                    flex
+                                    items-center
+                                    gap-2
+                                    text-violet-400
+                                    hover:text-violet-300
+                                    font-medium
+                                "
+                            >
+                                <ExternalLink size={16} />
+                                View
+                            </a>
+
+                            <a
+                                href={`http://localhost:5000/api/notes/download/${note._id}`}
+                                download
+                                className="
+                                    flex
+                                    items-center
+                                    gap-2
+                                    font-medium
+                                    text-sky-400
+                                    hover:text-sky-300
+                                "
+                            >
+                                <Download size={16} />
+                                Download
+                            </a>
+
+                        </>
+                    )}
 
                 </div>
 
