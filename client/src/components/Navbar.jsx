@@ -1,8 +1,16 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+    LayoutDashboard,
+    Upload,
+    User,
+    LogOut
+} from "lucide-react";
 
 function Navbar() {
 
     const navigate = useNavigate();
+
+    const location = useLocation();
 
     const user = JSON.parse(localStorage.getItem("user"));
 
@@ -22,31 +30,71 @@ function Navbar() {
 
                 <Link
                     to="/dashboard"
-                    className="text-2xl font-bold text-violet-400"
+                    className="
+                        text-2xl
+                        font-bold
+                        text-violet-400
+                        hover:text-violet-300
+                        transition-colors
+                    "
                 >
                     NoteNest
                 </Link>
 
                 <div className="flex items-center gap-6">
 
-                    <Link to="/dashboard">
-                        Dashboard
+                    <Link
+                        to="/dashboard"
+                        className={`
+                            px-3
+                            py-2
+                            rounded-lg
+                            transition-all
+                            duration-200
+                            ${
+                                location.pathname === "/dashboard"
+                                    ? "bg-violet-600 text-white"
+                                    : "text-slate-300 hover:text-white hover:bg-[#202636]"
+                            }
+                        `}
+                    >
+                        <div className="flex items-center gap-2">
+                            <LayoutDashboard size={18} />
+                            Dashboard
+                        </div>
                     </Link>
 
-                    <Link to="/upload">
-                        Upload
+                    <Link
+                        to="/upload"
+                        className={`
+                            px-3
+                            py-2
+                            rounded-lg
+                            transition-all
+                            duration-200
+                            ${
+                                location.pathname === "/upload"
+                                    ? "bg-violet-600 text-white"
+                                    : "text-slate-300 hover:text-white hover:bg-[#202636]"
+                            }
+                        `}
+                    >
+                        <div className="flex items-center gap-2">
+                            <Upload size={18} />
+                            Upload
+                        </div>
                     </Link>
 
-                    <span className="text-gray-400">
-
+                    <span className="flex items-center gap-2 text-slate-300 bg-[#202636] px-3 py-2 rounded-lg">
+                        <User size={18} />
                         {user?.name}
-
                     </span>
 
                     <button
                         onClick={handleLogout}
-                        className="text-red-400 hover:text-red-300"
+                        className="flex items-center gap-2 px-3 py-2 rounded-lg text-red-400 hover:bg-red-500 hover:text-white transition-all"
                     >
+                        <LogOut size={18} />
                         Logout
                     </button>
 

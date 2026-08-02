@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 import Button from "../components/Button";
 import Input from "../components/Input";
+import toast from "react-hot-toast";
 
 function Register() {
 
@@ -30,13 +31,13 @@ function Register() {
 
             const res = await api.post("/auth/register", form);
 
-            alert(res.data.message);
+            toast.success(res.data.message);
 
             navigate("/login");
 
         } catch (error) {
 
-            alert(error.response?.data?.message || error.message);
+            toast.error(error.response?.data?.message || error.message);
 
         }
 

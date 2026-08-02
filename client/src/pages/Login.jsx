@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 import Button from "../components/Button";
 import Input from "../components/Input";
+import toast from "react-hot-toast";
 
 function Login() {
 
@@ -35,13 +36,13 @@ function Login() {
                 JSON.stringify(res.data.user)
             );
 
-            alert("Login Successful!");
+            toast.success("Login successful!");
 
             navigate("/dashboard");
 
         } catch (error) {
 
-            alert(error.response?.data?.message || error.message);
+            toast.error(error.response?.data?.message || error.message);
 
         }
 
