@@ -2,19 +2,17 @@ import Navbar from "./Navbar";
 
 function Layout({ children }) {
     return (
-        <>
+        <div className="min-h-screen bg-[#0B0D12] text-white">
+
             <Navbar />
 
-            <main
-                style={{
-                    maxWidth: "1200px",
-                    margin: "30px auto",
-                    padding: "0 20px"
-                }}
-            >
+            <main className="max-w-7xl mx-auto px-6 py-8">
+
                 {children}
+
             </main>
-        </>
+
+        </div>
     );
 }
 

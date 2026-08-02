@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 import Button from "../components/Button";
 import Input from "../components/Input";
+import Layout from "../components/Layout";
 
 function UploadNote() {
 
@@ -47,7 +48,7 @@ function UploadNote() {
 
     return (
 
-        <div>
+        <Layout>
 
             <h1>Upload Note</h1>
 
@@ -94,7 +95,7 @@ function UploadNote() {
 
             </form>
 
-        </div>
+        </Layout>
 
     );
 

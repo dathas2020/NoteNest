@@ -49,11 +49,19 @@ function Login() {
 
     return (
 
-        <div>
+    <div className="min-h-screen bg-[#0B0D12] flex items-center justify-center px-6">
 
-            <h1>Login</h1>
+        <div className="w-full max-w-md bg-[#141821] border border-[#2A3142] rounded-2xl shadow-xl p-8">
 
-            <form onSubmit={handleSubmit}>
+            <h1 className="text-3xl font-bold text-center">
+                Welcome Back
+            </h1>
+
+            <p className="text-slate-400 text-center mt-2 mb-8">
+                Sign in to continue to NoteNest.
+            </p>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
 
                 <Input
                     name="email"
@@ -70,13 +78,35 @@ function Login() {
                     onChange={handleChange}
                 />
 
-                <Button type="submit">
+                <Button type="submit" className="w-full">
                     Login
                 </Button>
+
+                <div className="text-center pt-4 border-t border-[#2A3142]">
+
+                    <p className="text-slate-400 text-sm">
+
+                        Don't have an account?
+
+                        {" "}
+
+                        <button
+                            type="button"
+                            onClick={() => navigate("/register")}
+                            className="text-violet-400 hover:text-violet-300 font-medium"
+                        >
+                            Create one
+                        </button>
+
+                    </p>
+
+                </div>
 
             </form>
 
         </div>
+
+    </div>
 
     );
 

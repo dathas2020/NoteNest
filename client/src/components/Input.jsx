@@ -3,7 +3,7 @@ function Input({
     name,
     placeholder,
     value,
-    onChange
+    onChange,
 }) {
     return (
         <input
@@ -12,12 +12,20 @@ function Input({
             placeholder={placeholder}
             value={value}
             onChange={onChange}
-            style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "12px",
-                boxSizing: "border-box"
-            }}
+            className="
+                w-full
+                h-11
+                px-4
+                rounded-lg
+                bg-[#181A23]
+                border
+                border-gray-700
+                focus:border-violet-500
+                focus:outline-none
+                transition
+                text-white
+                placeholder:text-gray-500
+            "
         />
     );
 }

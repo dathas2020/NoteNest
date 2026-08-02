@@ -31,23 +31,34 @@ function Dashboard() {
 
     return (
 
-        <div>
-            <Layout/>
+        <Layout>
 
-            <h1>Dashboard</h1>
+            <h1 className="text-3xl font-bold">
+                Dashboard
+            </h1>
 
-            <h2>Your Notes</h2>
+            <p className="text-slate-400 mb-8">
+                Your Notes
+            </p>
 
-            {
-                notes.map((note) => (
+            <div className="
+                grid
+                grid-cols-1
+                md:grid-cols-2
+                lg:grid-cols-3
+                gap-6
+            ">
+
+                {notes.map((note) => (
                     <NoteCard
                         key={note._id}
                         note={note}
                     />
-                ))
-            }
+                ))}
 
-        </div>
+            </div>
+
+        </Layout>
 
     );
 

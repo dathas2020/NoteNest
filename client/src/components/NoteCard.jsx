@@ -2,31 +2,61 @@ function NoteCard({ note }) {
 
     return (
 
-        <div
-            style={{
-                border: "1px solid #ddd",
-                borderRadius: "8px",
-                padding: "16px",
-                marginBottom: "16px",
-                background: "#fff"
-            }}
-        >
+        <div className="
+            bg-[#141821]
+            border
+            border-[#2A3142]
+            rounded-xl
+            p-5
+            shadow-md
+            hover:shadow-xl
+            transition
+        ">
 
-            <h2>{note.title}</h2>
+            <h2 className="text-xl font-semibold">
 
-            <p>{note.description}</p>
+                {note.title}
 
-            <p>
-                <strong>Subject:</strong> {note.subject}
+            </h2>
+
+            <p className="text-slate-400 mt-2">
+
+                {note.description}
+
+            </p>
+
+            <p className="mt-4">
+
+                <span className="text-violet-400">
+
+                    Subject
+
+                </span>
+
+                {" "}
+
+                {note.subject}
+
             </p>
 
             <p>
-                <strong>Topic:</strong> {note.topic}
+
+                <span className="text-violet-400">
+
+                    Topic
+
+                </span>
+
+                {" "}
+
+                {note.topic}
+
             </p>
 
-            <p>
-                <strong>Uploaded By:</strong>{" "}
-                {note.uploadedBy?.name}
+            <p className="text-slate-400 mt-3">
+
+                Uploaded by {note.uploadedBy?.name}
+
             </p>
 
         </div>
