@@ -1,4 +1,47 @@
+import {
+    FileText,
+    User,
+    ExternalLink,
+    Pencil
+} from "lucide-react";
+import api from "../services/api";
+import toast from "react-hot-toast";
+import { useState } from "react";
+import ConfirmModal from "./ConfirmModal";
+import { useNavigate } from "react-router-dom";
+
 function NoteCard({ note }) {
+
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const navigate = useNavigate();
+
+    const handleDelete = async () => {
+
+        try {
+
+            await api.delete(`/notes/${note._id}`);
+
+            toast.success("Resource deleted successfully!");
+
+            setShowDeleteModal(false);
+
+            window.location.reload();
+
+        } catch (error) {
+
+            toast.error(
+                error.response?.data?.message || error.message
+            );
+
+        }
+
+    };
+
+    const currentUser = JSON.parse(
+        localStorage.getItem("user")
+    );
+
+    const isOwner = currentUser?.id === note.uploadedBy?._id;
 
     return (
 
@@ -25,9 +68,10 @@ function NoteCard({ note }) {
 
                 <div className="flex items-center gap-2 mb-3">
 
-                    <span className="text-xl">
-                        📄
-                    </span>
+                    <FileText
+                        size={22}
+                        className="text-violet-400"
+                    />
 
                     <h2 className="text-2xl font-semibold leading-tight">
 
@@ -89,27 +133,81 @@ function NoteCard({ note }) {
 
             <div className="mt-8 pt-4 border-t border-[#2A3142] flex justify-between items-center">
 
-                <span className="text-slate-400">
+                <span className="flex items-center gap-2 text-slate-400">
 
-                    👤 {note.uploadedBy?.name}
+                    <User size={16} />
+
+                    Uploaded by {note.uploadedBy?.name}
 
                 </span>
 
-                <button
-                    className="
-                        text-violet-400
-                        hover:text-violet-300
-                        font-medium
-                    "
-                >
-                    View →
-                </button>
+                <div className="flex items-center gap-4">
+
+                    {isOwner && (
+
+                        <>
+
+                            <button
+                                onClick={() => navigate(`/edit/${note._id}`)}
+                                className="
+                                    flex
+                                    items-center
+                                    gap-2
+                                    text-amber-400
+                                    hover:text-amber-300
+                                    font-medium
+                                "
+                            >
+                                <Pencil size={16} />
+                                Edit
+                            </button>
+
+                            <button
+                                onClick={() => setShowDeleteModal(true)}
+                                className="
+                                    text-red-400
+                                    hover:text-red-300
+                                    font-medium
+                                "
+                            >
+                                Delete
+                            </button>
+
+                        </>
+
+                    )}
+
+                    <a
+                        href={`http://localhost:5000/uploads/${note.fileUrl}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="
+                            flex
+                            items-center
+                            gap-2
+                            text-violet-400
+                            hover:text-violet-300
+                            font-medium
+                        "
+                    >
+                        <ExternalLink size={16} />
+                        View PDF
+                    </a>
+
+                </div>
 
             </div>
 
-        </div>
+            <ConfirmModal
+                isOpen={showDeleteModal}
+                title="Delete Resource?"
+                message="This action cannot be undone."
+                onCancel={() => setShowDeleteModal(false)}
+                onConfirm={handleDelete}
+            />
 
-    );
+        </div>
+    )
 
 }
 

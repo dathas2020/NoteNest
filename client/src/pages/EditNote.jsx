@@ -1,15 +1,18 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "../services/api";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import Layout from "../components/Layout";
 import toast from "react-hot-toast";
-import { UploadCloud } from "lucide-react";
+import {
+    Save
+} from "lucide-react";
 
-function UploadNote() {
+function EditNote() {
 
     const navigate = useNavigate();
+    const { id } = useParams();
 
     const [form, setForm] = useState({
         title: "",
@@ -18,7 +21,6 @@ function UploadNote() {
         topic: ""
     });
 
-    const [pdf, setPdf] = useState(null);
 
     const handleChange = (e) => {
 
@@ -29,32 +31,58 @@ function UploadNote() {
 
     };
 
+    useEffect(() => {
+
+        fetchNote();
+
+    }, []);
+
+    const fetchNote = async () => {
+
+        try {
+
+            const res = await api.get("/notes");
+
+            const note = res.data.notes.find(
+                (n) => n._id === id
+            );
+
+            if (!note) {
+
+                toast.error("Note not found.");
+
+                navigate("/dashboard");
+
+                return;
+
+            }
+
+            setForm({
+
+                title: note.title,
+                description: note.description,
+                subject: note.subject,
+                topic: note.topic
+
+            });
+
+        } catch (error) {
+
+            toast.error(error.response?.data?.message || error.message);
+
+        }
+
+    };
+
     const handleSubmit = async (e) => {
 
         e.preventDefault();
 
         try {
 
-            const formData = new FormData();
+            await api.put(`/notes/${id}`, form);
 
-            formData.append("title", form.title);
-            formData.append("description", form.description);
-            formData.append("subject", form.subject);
-            formData.append("topic", form.topic);
-
-            formData.append("pdf", pdf);
-
-            await api.post("/notes", formData, {
-
-                headers: {
-
-                    "Content-Type": "multipart/form-data"
-
-                }
-
-            });
-
-            toast.success("Resource uploaded successfully!");
+            toast.success("Resource updated successfully!");
 
             navigate("/dashboard");
 
@@ -75,11 +103,11 @@ function UploadNote() {
                 <div className="mb-10">
 
                     <h1 className="text-4xl font-bold">
-                        Contribute to the Community
+                        Edit Resource
                     </h1>
 
                     <p className="text-slate-400 mt-2">
-                        Share your study resources and help fellow students learn.
+                        Update your note information.
                     </p>
 
                 </div>
@@ -126,43 +154,17 @@ function UploadNote() {
                             onChange={handleChange}
                         />
 
-                        <div>
+                        
 
-                            <label className="block text-sm text-slate-400 mb-2">
-                                PDF File
-                            </label>
-
-                            <input
-                                type="file"
-                                accept="application/pdf"
-                                onChange={(e) => setPdf(e.target.files[0])}
-                                className="
-                                    w-full
-                                    text-slate-300
-                                    file:bg-violet-600
-                                    file:text-white
-                                    file:border-0
-                                    file:px-4
-                                    file:py-2
-                                    file:rounded-lg
-                                    file:mr-4
-                                    cursor-pointer
-                                "
-                            />
-
-                            <p className="text-xs text-slate-500 mt-2">
-                                PDF only • Maximum size: 8 MB
-                            </p>
-
-                        </div>
+                            
 
                         <Button
                             type="submit"
                             className="w-full flex items-center justify-center gap-2"
                         >
-                            <UploadCloud size={20} />
+                            <Save />
 
-                            Upload Resource
+                            Save Changes
                         </Button>
 
                     </form>
@@ -177,4 +179,4 @@ function UploadNote() {
 
 }
 
-export default UploadNote;
+export default EditNote;

@@ -2,11 +2,36 @@ import Note from "../models/Note.js";
 
 // Create Note
 export const createNote = async (req, res) => {
+
     try {
 
+        const {
+            title,
+            description,
+            subject,
+            topic
+        } = req.body;
+
+        if (!req.file) {
+
+            return res.status(400).json({
+                success: false,
+                message: "Please upload a PDF."
+            });
+
+        }
+
         const note = await Note.create({
-            ...req.body,
+
+            title,
+            description,
+            subject,
+            topic,
+
+            fileUrl: req.file.filename,
+
             uploadedBy: req.user
+
         });
 
         res.status(201).json({
@@ -23,6 +48,7 @@ export const createNote = async (req, res) => {
         });
 
     }
+
 };
 
 // Get All Notes
@@ -73,6 +99,109 @@ export const searchNotes = async (req, res) => {
         res.status(500).json({
             success: false,
             message: error.message
+        });
+
+    }
+
+};
+
+// Delete Note
+export const deleteNote = async (req, res) => {
+
+    try {
+
+        const note = await Note.findById(req.params.id);
+
+        if (!note) {
+
+            return res.status(404).json({
+                success: false,
+                message: "Note not found."
+            });
+
+        }
+
+        if (note.uploadedBy.toString() !== req.user.toString()) {
+
+            return res.status(403).json({
+                success: false,
+                message: "You are not authorized to delete this note."
+            });
+
+        }
+
+        await note.deleteOne();
+
+        res.status(200).json({
+            success: true,
+            message: "Note deleted successfully."
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+
+    }
+
+};
+
+// Update Note
+export const updateNote = async (req, res) => {
+
+    try {
+
+        const note = await Note.findById(req.params.id);
+
+        if (!note) {
+
+            return res.status(404).json({
+                success: false,
+                message: "Note not found."
+            });
+
+        }
+
+        if (note.uploadedBy.toString() !== req.user.toString()) {
+
+            return res.status(403).json({
+                success: false,
+                message: "You are not authorized to edit this note."
+            });
+
+        }
+
+        const updatedNote = await Note.findByIdAndUpdate(
+
+            req.params.id,
+
+            req.body,
+
+            {
+                new: true,
+                runValidators: true
+            }
+
+        );
+
+        res.status(200).json({
+
+            success: true,
+            message: "Note updated successfully.",
+
+            note: updatedNote
+
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+
+            success: false,
+            message: error.message
+
         });
 
     }

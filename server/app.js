@@ -1,3 +1,4 @@
+import path from "path";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -12,6 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use(cookieParser());
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 app.use("/api/notes", noteRoutes);
 

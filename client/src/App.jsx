@@ -9,6 +9,7 @@ import UploadNote from "./pages/UploadNote";
 import NoteDetails from "./pages/NoteDetails";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
+import EditNote from "./pages/EditNote";
 
 function App() {
 
@@ -17,6 +18,15 @@ function App() {
         <Routes>
 
             <Route path="/" element={<Landing />} />
+
+            <Route
+                path="/edit/:id"
+                element={
+                    <ProtectedRoute>
+                        <EditNote />
+                    </ProtectedRoute>
+                }
+            />
 
             <Route
                 path="/login"
