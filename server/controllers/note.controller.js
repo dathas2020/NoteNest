@@ -1,4 +1,7 @@
 import Note from "../models/Note.js";
+import fs from "fs";
+import path from "path";
+import { PDFDocument } from "pdf-lib";
 
 // Create Note
 export const createNote = async (req, res) => {
@@ -21,6 +24,14 @@ export const createNote = async (req, res) => {
 
         }
 
+        const pdfBuffer = fs.readFileSync(req.file.path);
+
+        const pdfDoc = await PDFDocument.load(pdfBuffer);
+
+        const pages = pdfDoc.getPageCount();
+
+        const fileSize = req.file.size;
+
         const note = await Note.create({
 
             title,
@@ -29,6 +40,10 @@ export const createNote = async (req, res) => {
             topic,
 
             fileUrl: req.file.filename,
+
+            pages,
+
+            fileSize,
 
             uploadedBy: req.user
 
@@ -129,6 +144,14 @@ export const deleteNote = async (req, res) => {
             });
 
         }
+
+        const filePath = path.join(
+            process.cwd(),
+            "uploads",
+            note.fileUrl
+        );
+
+        fs.unlinkSync(filePath);
 
         await note.deleteOne();
 

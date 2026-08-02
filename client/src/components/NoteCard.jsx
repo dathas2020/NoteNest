@@ -1,8 +1,11 @@
 import {
+    Download,
     FileText,
     User,
     ExternalLink,
-    Pencil
+    Pencil,
+    HardDrive,
+    Clock3
 } from "lucide-react";
 import api from "../services/api";
 import toast from "react-hot-toast";
@@ -10,7 +13,10 @@ import { useState } from "react";
 import ConfirmModal from "./ConfirmModal";
 import { useNavigate } from "react-router-dom";
 
-function NoteCard({ note }) {
+function NoteCard({
+    note,
+    onDelete
+}) {
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const navigate = useNavigate();
@@ -25,7 +31,7 @@ function NoteCard({ note }) {
 
             setShowDeleteModal(false);
 
-            window.location.reload();
+            onDelete(note._id);
 
         } catch (error) {
 
@@ -42,6 +48,33 @@ function NoteCard({ note }) {
     );
 
     const isOwner = currentUser?.id === note.uploadedBy?._id;
+
+    const formatFileSize = (bytes) => {
+
+        if (bytes < 1024) return `${bytes} B`;
+
+        if (bytes < 1024 * 1024)
+            return `${(bytes / 1024).toFixed(1)} KB`;
+
+        return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+
+    };
+
+    const uploadedAgo = () => {
+
+        const date = new Date(note.createdAt);
+
+        const diff = Date.now() - date.getTime();
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+        if (days === 0) return "Today";
+
+        if (days === 1) return "1 day ago";
+
+        return `${days} days ago`;
+
+    };
 
     return (
 
@@ -127,21 +160,57 @@ function NoteCard({ note }) {
 
                     </div>
 
+                   <div className="
+                        pt-5
+                        pb-5
+                        border-t
+                        border-b
+                        border-[#2A3142]
+                        grid
+                        grid-cols-3
+                        gap-4
+                    ">
+
+                        <div className="flex items-center gap-2 text-slate-400">
+                            <FileText size={16} />
+                            <span>{note.pages} Pages</span>
+                        </div>
+
+                        <div className="flex items-center gap-2 text-slate-400">
+                            <HardDrive size={16} />
+                            <span>{formatFileSize(note.fileSize)}</span>
+                        </div>
+
+                        <div className="flex items-center gap-2 text-slate-400">
+                            <Clock3 size={16} />
+                            <span>{uploadedAgo()}</span>
+                        </div>
+
+                    </div>
+
                 </div>
 
             </div>
 
-            <div className="mt-8 pt-4 border-t border-[#2A3142] flex justify-between items-center">
+            <div className="mt-6">
 
-                <span className="flex items-center gap-2 text-slate-400">
+                <div className="flex items-center gap-2 text-slate-400 min-w-0">
 
-                    <User size={16} />
+                    <User
+                        size={16}
+                        className="shrink-0"
+                    />
 
-                    Uploaded by {note.uploadedBy?.name}
+                    <span
+                        className="truncate max-w-[110px]"
+                        title={note.uploadedBy?.name}
+                    >
+                        {note.uploadedBy?.name}
+                    </span>
 
-                </span>
+                </div>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-6 mt-4">
 
                     {isOwner && (
 
@@ -191,7 +260,23 @@ function NoteCard({ note }) {
                         "
                     >
                         <ExternalLink size={16} />
-                        View PDF
+                        View
+                    </a>
+
+                    <a
+                        href={`http://localhost:5000/uploads/${note.fileUrl}`}
+                        download
+                        className="
+                            flex
+                            items-center
+                            gap-2
+                            font-medium
+                            text-sky-400
+                            hover:text-sky-300
+                        "
+                    >
+                        <Download size={16} />
+                        Download
                     </a>
 
                 </div>
