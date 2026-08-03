@@ -104,6 +104,11 @@ function BrowseNotes() {
                         <NoteCard
                             key={note._id}
                             note={note}
+                            onDelete={(id) =>
+                                setNotes((prev) =>
+                                    prev.filter((note) => note._id !== id)
+                                )
+                            }
                         />
 
                     ))}

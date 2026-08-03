@@ -18,7 +18,7 @@ function Navbar() {
 
         localStorage.clear();
 
-        navigate("/login");
+        navigate("/");
 
     };
 
